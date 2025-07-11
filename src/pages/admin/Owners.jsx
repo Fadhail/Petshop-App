@@ -5,7 +5,7 @@ import {
   createOwner, 
   updateOwner, 
   deleteOwner 
-} from '../services/api';
+} from '../../services/api';
 
 export default function Owners() {
   const [owners, setOwners] = useState([]);

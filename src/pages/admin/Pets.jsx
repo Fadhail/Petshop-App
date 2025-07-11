@@ -6,7 +6,7 @@ import {
   updatePet, 
   deletePet,
   fetchOwners 
-} from '../services/api';
+} from '../../services/api';
 
 export default function Pets() {
   const [pets, setPets] = useState([]);

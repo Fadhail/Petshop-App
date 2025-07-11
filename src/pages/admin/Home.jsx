@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { fetchPets, fetchOwners, fetchServices, fetchAppointments } from '../services/api';
+import { fetchPets, fetchOwners, fetchServices, fetchAppointments } from '../../services/api';
 
 export default function Home() {
   const [stats, setStats] = useState({

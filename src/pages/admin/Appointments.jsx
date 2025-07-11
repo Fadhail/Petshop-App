@@ -7,7 +7,7 @@ import {
   deleteAppointment,
   fetchPets,
   fetchServices
-} from '../services/api';
+} from '../../services/api';
 
 export default function Appointments() {
   const [appointments, setAppointments] = useState([]);

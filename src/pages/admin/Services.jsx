@@ -5,7 +5,7 @@ import {
   createService, 
   updateService, 
   deleteService 
-} from '../services/api';
+} from '../../services/api';
 
 export default function Services() {
   const [services, setServices] = useState([]);

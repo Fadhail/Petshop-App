@@ -1,7 +1,7 @@
 import Sidebar from "../components/organisms/Sidebar"
 import { Outlet } from "react-router-dom";
 
-const MainLayout = ({ children }) => {
+const AdminLayout = ({ children }) => {
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
@@ -12,4 +12,4 @@ const MainLayout = ({ children }) => {
   )
 }
 
-export default MainLayout
+export default AdminLayout

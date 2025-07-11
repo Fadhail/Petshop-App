@@ -1,17 +1,17 @@
 import { Routes, Route } from "react-router-dom"
-import MainLayout from "./layouts/MainLayout"
-import Home from "./pages/Home"
-import Pets from "./pages/Pets"
-import Owners from "./pages/Owners"
-import Services from "./pages/Services"
-import Appointments from "./pages/Appointments"
-import AppointmentDetail from "./pages/AppointmentDetail"
-import FormPet from "./pages/FormPet"
+import AdminLayout from "./layouts/AdminLayout"
+import Home from "./pages/admin/Home"
+import Pets from "./pages/admin/Pets"
+import Owners from "./pages/admin/Owners"
+import Services from "./pages/admin/Services"
+import Appointments from "./pages/admin/Appointments"
+import AppointmentDetail from "./pages/admin/AppointmentDetail"
+import FormPet from "./pages/admin/FormPet"
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<MainLayout />}>
+      <Route path="/" element={<AdminLayout />}>
         <Route index element={<Home />} />
         <Route path="/pets" element={<Pets />} />
         <Route path="/owners" element={<Owners />} />
