@@ -3,9 +3,6 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: 'http://localhost:3000/api',
   timeout: 5000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 // Pets API
@@ -35,6 +32,13 @@ export const fetchService = (id) => api.get(`/services/${id}`);
 export const createService = (serviceData) => api.post('/services', serviceData);
 export const updateService = (id, serviceData) => api.put(`/services/${id}`, serviceData);
 export const deleteService = (id) => api.delete(`/services/${id}`);
+
+// Adoptions API
+export const fetchAdoptions = () => api.get('/adoptions');
+export const fetchAdoption = (id) => api.get(`/adoptions/${id}`);
+export const createAdoption = (adoptionData) => api.post('/adoptions', adoptionData);
+export const updateAdoption = (id, adoptionData) => api.put(`/adoptions/${id}`, adoptionData);
+export const deleteAdoption = (id) => api.delete(`/adoptions/${id}`);
 
 // Export the base API instance in case it's needed
 export default api;
