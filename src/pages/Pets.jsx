@@ -4,11 +4,13 @@ import {
   fetchPet, 
   createPet, 
   updatePet, 
-  deletePet 
+  deletePet,
+  fetchOwners 
 } from '../services/api';
 
 export default function Pets() {
   const [pets, setPets] = useState([]);
+  const [owners, setOwners] = useState([]);
   const [currentPet, setCurrentPet] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -29,8 +31,20 @@ export default function Pets() {
     }
   };
 
+  // Fetch all owners
+  const loadOwners = async () => {
+    try {
+      const response = await fetchOwners();
+      setOwners(response.data);
+    } catch (error) {
+      console.error('Error fetching owners:', error);
+      alert('Failed to load owners');
+    }
+  };
+
   useEffect(() => {
     loadPets();
+    loadOwners();
   }, []);
 
   // Handle form input changes
@@ -139,7 +153,7 @@ export default function Pets() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Species</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Owner ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Owner</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
@@ -156,7 +170,9 @@ export default function Pets() {
                     <div className="text-sm text-gray-500">{pet.age}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{pet.owner_id}</div>
+                    <div className="text-sm text-gray-500">
+                      {owners.find(owner => owner.id === pet.owner_id)?.name || 'Unknown Owner'}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
@@ -181,101 +197,107 @@ export default function Pets() {
 
       {/* Add/Edit Pet Modal */}
       {isModalOpen && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          <div className="fixed z-10 inset-0 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          </div>
+          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
+            &#8203;
+          </span>
+          <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div>
+              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+            {currentPet ? 'Edit Pet' : 'Add New Pet'}
+              </h3>
+              <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Pet Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
             </div>
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
-              &#8203;
-            </span>
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-              <div>
-                <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-                  {currentPet ? 'Edit Pet' : 'Add New Pet'}
-                </h3>
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-4">
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                      Pet Name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      id="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                      required
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label htmlFor="species" className="block text-sm font-medium text-gray-700">
-                      Species
-                    </label>
-                    <input
-                      type="text"
-                      name="species"
-                      id="species"
-                      value={formData.species}
-                      onChange={handleInputChange}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                      required
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label htmlFor="age" className="block text-sm font-medium text-gray-700">
-                      Age
-                    </label>
-                    <input
-                      type="number"
-                      name="age"
-                      id="age"
-                      min="0"
-                      value={formData.age}
-                      onChange={handleInputChange}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                      required
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label htmlFor="owner_id" className="block text-sm font-medium text-gray-700">
-                      Owner ID
-                    </label>
-                    <input
-                      type="text"
-                      name="owner_id"
-                      id="owner_id"
-                      value={formData.owner_id}
-                      onChange={handleInputChange}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                      required
-                    />
-                  </div>
-                  <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                    <button
-                      type="submit"
-                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
-                    >
-                      {currentPet ? 'Update' : 'Create'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsModalOpen(false);
-                        resetForm();
-                      }}
-                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              </div>
+            <div className="mb-4">
+              <label htmlFor="species" className="block text-sm font-medium text-gray-700">
+                Species
+              </label>
+              <input
+                type="text"
+                name="species"
+                id="species"
+                value={formData.species}
+                onChange={handleInputChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="age" className="block text-sm font-medium text-gray-700">
+                Age
+              </label>
+              <input
+                type="number"
+                name="age"
+                id="age"
+                min="0"
+                value={formData.age}
+                onChange={handleInputChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="owner_id" className="block text-sm font-medium text-gray-700">
+                Owner
+              </label>
+              <select
+                name="owner_id"
+                id="owner_id"
+                value={formData.owner_id}
+                onChange={handleInputChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              >
+                <option value="">Select Owner</option>
+                {owners.map(owner => (
+              <option key={owner.id} value={owner.id}>
+                {owner.name}
+              </option>
+                ))}
+              </select>
+            </div>
+            <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+              <button
+                type="submit"
+                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
+              >
+                {currentPet ? 'Update' : 'Create'}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+              setIsModalOpen(false);
+              resetForm();
+                }}
+                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+              >
+                Cancel
+              </button>
+            </div>
+              </form>
             </div>
           </div>
-        </div>
-      )}
+            </div>
+          </div>
+        )}
     </div>
   );
 }
