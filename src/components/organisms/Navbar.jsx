@@ -19,10 +19,10 @@ const Navbar = ({ transparent = false }) => {
             <span className={logoTextClasses}>PetAdopt</span>
           </div>
           <div className="flex items-center space-x-6">
-            <Link to="/" className="text-md text-white hover:text-gray-200">
+            <Link to="/login" className="text-md text-white hover:text-gray-200">
                 Login
             </Link>
-            <Link to="/" className="text-md text-white border border-white rounded-full px-4 py-1 hover:bg-white hover:text-black transition">
+            <Link to="/register" className="text-md text-white border border-white rounded-full px-4 py-1 hover:bg-white hover:text-black transition">
                 Sign Up
             </Link>
           </div>

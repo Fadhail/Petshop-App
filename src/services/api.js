@@ -5,6 +5,39 @@ const api = axios.create({
   timeout: 5000,
 });
 
+// Auth API (tanpa prefix /api)
+const authApi = axios.create({
+  baseURL: 'http://localhost:3000',
+  timeout: 5000,
+});
+
+// Add token to requests
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Handle token expiration
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid
+      localStorage.removeItem('authToken');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Pets API
 export const fetchPets = () => api.get('/pets');
 export const fetchPet = (id) => api.get(`/pets/${id}`);
@@ -32,6 +65,10 @@ export const fetchService = (id) => api.get(`/services/${id}`);
 export const createService = (serviceData) => api.post('/services', serviceData);
 export const updateService = (id, serviceData) => api.put(`/services/${id}`, serviceData);
 export const deleteService = (id) => api.delete(`/services/${id}`);
+
+// Authentication API
+export const loginUser = (credentials) => authApi.post('/login', credentials);
+export const registerUser = (userData) => authApi.post('/register', userData);
 
 // Adoptions API
 export const fetchAdoptions = () => api.get('/adoptions');

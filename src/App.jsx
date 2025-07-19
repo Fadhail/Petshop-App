@@ -12,12 +12,35 @@ import AdoptionDashboard from "./pages/dashboard/AdoptionDashboard"
 import MyAdoptions from "./pages/dashboard/MyAdoptions"
 import AdoptionTips from "./pages/dashboard/AdoptionTips"
 import LandingPage from "./pages/LandingPage"
+import Login from "./pages/Login"
+import Register from "./pages/Register"
+import ProtectedRoute from "./components/ProtectedRoute"
+import AdminRoute from "./components/AdminRoute"
+import UserRoute from "./components/UserRoute"
+import PublicRoute from "./components/PublicRoute"
 
 function App() {
   return (
     <Routes>
-      {/* Admin Routes */}
-      <Route path="/admin" element={<AdminLayout />}>
+      {/* Public Routes */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={
+        <PublicRoute>
+          <Login />
+        </PublicRoute>
+      } />
+      <Route path="/register" element={
+        <PublicRoute>
+          <Register />
+        </PublicRoute>
+      } />
+
+      {/* Admin Routes - Only for Admin Role */}
+      <Route path="/admin" element={
+        <AdminRoute>
+          <AdminLayout />
+        </AdminRoute>
+      }>
         <Route index element={<Home />} />
         <Route path="pets" element={<Pets />} />
         <Route path="owners" element={<Owners />} />
@@ -27,15 +50,16 @@ function App() {
         <Route path="form-pet" element={<FormPet />} />
       </Route>
 
-      {/* Dashboard Routes */}
-      <Route path="/dashboard" element={<DashboardLayout />}>
+      {/* Dashboard Routes - Only for User Role */}
+      <Route path="/dashboard" element={
+        <UserRoute>
+          <DashboardLayout />
+        </UserRoute>
+      }>
         <Route index element={<AdoptionDashboard />} />
         <Route path="my-adoptions" element={<MyAdoptions />} />
         <Route path="tips" element={<AdoptionTips />} />
       </Route>
-
-      {/* Landing Page */}
-      <Route path="/" element={<LandingPage />} />
     </Routes>
   )
 }
