@@ -101,8 +101,7 @@ const Register = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Petshop Admin</h1>
-          <h2 className="text-2xl font-semibold text-gray-700">Create your account</h2>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Sign Up</h1>
         </div>
       </div>
 
@@ -130,7 +129,7 @@ const Register = () => {
                 onChange={handleInputChange}
                 required
                 autoComplete="email"
-                placeholder="admin@petshop.com"
+                placeholder="johndoe@gmail.com"
               />
             </div>
 
@@ -210,7 +209,7 @@ const Register = () => {
           to="/"
           className="text-sm text-gray-500 hover:text-gray-700"
         >
-          ← Back to Home
+          ← Back
         </Link>
       </div>
     </div>

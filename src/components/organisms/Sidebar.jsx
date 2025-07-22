@@ -31,6 +31,7 @@ const Sidebar = ({ className = "" }) => {
     { name: "Owners", icon: <UsersIcon />, path: "/admin/owners" },
     { name: "Services", icon: <ServiceIcon />, path: "/admin/services" },
     { name: "Appointments", icon: <CalendarIcon />, path: "/admin/appointments" },
+    { name: "Adoptions", icon: <PetIcon />, path: "/admin/adoptions" }
   ]
 
   return (

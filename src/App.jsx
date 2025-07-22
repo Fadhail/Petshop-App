@@ -18,6 +18,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import AdminRoute from "./components/AdminRoute"
 import UserRoute from "./components/UserRoute"
 import PublicRoute from "./components/PublicRoute"
+import Adoptions from "./pages/admin/Adoptions"
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         <Route path="appointments" element={<Appointments />} />
         <Route path="appointments/:id" element={<AppointmentDetail />} />
         <Route path="form-pet" element={<FormPet />} />
+        <Route path="adoptions" element={<Adoptions />} />
       </Route>
 
       {/* Dashboard Routes - Only for User Role */}
@@ -58,7 +60,7 @@ function App() {
       }>
         <Route index element={<AdoptionDashboard />} />
         <Route path="my-adoptions" element={<MyAdoptions />} />
-        <Route path="tips" element={<AdoptionTips />} />
+        <Route path="adoption-tips" element={<AdoptionTips />} />
       </Route>
     </Routes>
   )

@@ -90,25 +90,25 @@ const AdoptionDashboard = () => {
 
   const handleAdoptionSubmit = async (formData) => {
     try {
-      // Create adoption request
+      // Create adoption request with the correct field names matching backend model
       const adoptionData = {
         pet_id: formData.petId,
-        adopter_name: formData.name,
-        adopter_email: formData.email,
-        adopter_phone: formData.phone,
-        adopter_address: formData.address,
-        experience: formData.experience,
+        pet_name: formData.petName,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        experience: formData.experience || "",
         reason: formData.reason,
         living_space: formData.livingSpace,
         has_other_pets: formData.hasOtherPets,
-        other_pets_details: formData.otherPetsDetails,
-        status: 'pending'
+        other_pets_details: formData.otherPetsDetails || ""
       };
 
-      await createAdoption(adoptionData);
+      const response = await createAdoption(adoptionData);
       
-      // Update pet status to pending
-      await updatePet(formData.petId, { status: 'pending' });
+      // Update pet status to pending (optional - depends on business logic)
+      // await updatePet(formData.petId, { status: 'pending' });
       
       // Update local state
       setPets(prevPets =>
@@ -133,7 +133,17 @@ const AdoptionDashboard = () => {
       alert("Permohonan adopsi berhasil dikirim! Kami akan menghubungi Anda segera.");
     } catch (error) {
       console.error('Error submitting adoption:', error);
-      alert("Terjadi kesalahan saat mengirim permohonan adopsi. Silakan coba lagi.");
+      let errorMessage = "Terjadi kesalahan saat mengirim permohonan adopsi.";
+      
+      if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert(errorMessage);
     }
   };
 

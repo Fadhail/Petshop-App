@@ -73,6 +73,8 @@ export const registerUser = (userData) => authApi.post('/register', userData);
 // Adoptions API
 export const fetchAdoptions = () => api.get('/adoptions');
 export const fetchAdoption = (id) => api.get(`/adoptions/${id}`);
+export const fetchAdoptionsByStatus = (status) => api.get(`/adoptions/status?status=${status}`);
+export const fetchAdoptionsByPetId = (petId) => api.get(`/adoptions/pet/${petId}`);
 export const createAdoption = (adoptionData) => api.post('/adoptions', adoptionData);
 export const updateAdoption = (id, adoptionData) => api.put(`/adoptions/${id}`, adoptionData);
 export const deleteAdoption = (id) => api.delete(`/adoptions/${id}`);
