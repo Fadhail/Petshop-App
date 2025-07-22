@@ -11,20 +11,20 @@ const SearchFilter = ({
   onClearFilters
 }) => {
   const speciesOptions = [
-    { value: "", label: "Semua Jenis" },
-    { value: "anjing", label: "Anjing" },
-    { value: "kucing", label: "Kucing" },
-    { value: "burung", label: "Burung" },
-    { value: "kelinci", label: "Kelinci" },
-    { value: "hamster", label: "Hamster" },
-    { value: "ikan", label: "Ikan" }
+    { value: "", label: "All Species" },
+    { value: "dog", label: "dog" },
+    { value: "cat", label: "cat" },
+    { value: "bird", label: "bird" },
+    { value: "rabbit", label: "rabbit" },
+    { value: "hamster", label: "hamster" },
+    { value: "fish", label: "fish" }
   ];
 
   const statusOptions = [
-    { value: "", label: "Semua Status" },
-    { value: "available", label: "Tersedia" },
-    { value: "pending", label: "Menunggu" },
-    { value: "adopted", label: "Telah Diadopsi" }
+    { value: "", label: "All Status" },
+    { value: "available", label: "Available" },
+    { value: "pending", label: "Pending" },
+    { value: "adopted", label: "Adopted" }
   ];
 
   return (

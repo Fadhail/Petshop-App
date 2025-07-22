@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { fetchPets, fetchOwners, createAdoption, updatePet } from "../../services/api";
-import DashboardStats from "../../components/organisms/DashboardStats";
 import PetGrid from "../../components/organisms/PetGrid";
 import PetDetailModal from "../../components/organisms/PetDetailModal";
 import AdoptionForm from "../../components/organisms/AdoptionForm";
@@ -34,17 +33,12 @@ const AdoptionDashboard = () => {
         // Transform pets data to include adoption status
         const transformedPets = petsData.map(pet => ({
           ...pet,
-          // Map species to Indonesian
-          species: pet.species === 'dog' ? 'anjing' : 
-                   pet.species === 'cat' ? 'kucing' : 
-                   pet.species === 'bird' ? 'burung' :
-                   pet.species === 'rabbit' ? 'kelinci' :
-                   pet.species === 'hamster' ? 'hamster' :
-                   pet.species === 'fish' ? 'ikan' : pet.species,
+          // Keep species in English as it's more standard
+          species: pet.species || 'unknown',
           // Add default status if not present
           status: pet.status || 'available',
-          // Add gender in Indonesian
-          gender: pet.gender || 'Tidak diketahui',
+          // Add gender (keep as is or default)
+          gender: pet.gender || 'Unknown',
           // Add default image if not present
           image: pet.image || "/api/placeholder/300/200",
           // Add owner info
@@ -185,18 +179,6 @@ const AdoptionDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Dashboard Adopsi Hewan
-          </h1>
-          <p className="text-gray-600">
-            Temukan teman berbulu baru untuk keluarga Anda
-          </p>
-        </div>
-
-        {/* Stats */}
-        <DashboardStats stats={stats} />
 
         {/* Pet Grid */}
         <PetGrid

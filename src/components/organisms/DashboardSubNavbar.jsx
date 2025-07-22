@@ -3,15 +3,21 @@ import { Link, useLocation } from "react-router-dom";
 const DashboardIcon = () => <span className="text-lg">📊</span>;
 const HeartIcon = () => <span className="text-lg">❤️</span>;
 const TipsIcon = () => <span className="text-lg">💡</span>;
+const ServiceIcon = () => <span className="text-lg">🛎️</span>;
 
 const DashboardSubNavbar = ({ className = "" }) => {
   const location = useLocation();
 
   const menuItems = [
     { 
-      name: "Dashboard", 
+      name: "Adoption", 
       icon: <DashboardIcon />, 
       path: "/dashboard"
+    },
+    { 
+      name: "Layanan", 
+      icon: <ServiceIcon />, 
+      path: "/dashboard/services"
     },
     { 
       name: "Adopsi Saya", 
@@ -22,7 +28,7 @@ const DashboardSubNavbar = ({ className = "" }) => {
       name: "Tips Adopsi", 
       icon: <TipsIcon />, 
       path: "/dashboard/adoption-tips"
-    }
+    },
   ];
 
   const isActivePath = (path) => {

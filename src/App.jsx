@@ -4,13 +4,13 @@ import DashboardLayout from "./layouts/DashboardLayout"
 import Home from "./pages/admin/Home"
 import Pets from "./pages/admin/Pets"
 import Owners from "./pages/admin/Owners"
-import Services from "./pages/admin/Services"
 import Appointments from "./pages/admin/Appointments"
 import AppointmentDetail from "./pages/admin/AppointmentDetail"
 import FormPet from "./pages/admin/FormPet"
 import AdoptionDashboard from "./pages/dashboard/AdoptionDashboard"
 import MyAdoptions from "./pages/dashboard/MyAdoptions"
 import AdoptionTips from "./pages/dashboard/AdoptionTips"
+import DashboardServices from "./pages/dashboard/Services"
 import LandingPage from "./pages/LandingPage"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
@@ -45,7 +45,6 @@ function App() {
         <Route index element={<Home />} />
         <Route path="pets" element={<Pets />} />
         <Route path="owners" element={<Owners />} />
-        <Route path="services" element={<Services />} />
         <Route path="appointments" element={<Appointments />} />
         <Route path="appointments/:id" element={<AppointmentDetail />} />
         <Route path="form-pet" element={<FormPet />} />
@@ -61,6 +60,7 @@ function App() {
         <Route index element={<AdoptionDashboard />} />
         <Route path="my-adoptions" element={<MyAdoptions />} />
         <Route path="adoption-tips" element={<AdoptionTips />} />
+        <Route path="services" element={<DashboardServices />} />
       </Route>
     </Routes>
   )
