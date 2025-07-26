@@ -7,7 +7,7 @@ import {
   deleteService 
 } from '../../services/api';
 
-export default function Services() {
+export default function AdminServices() {
   const [services, setServices] = useState([]);
   const [currentService, setCurrentService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);

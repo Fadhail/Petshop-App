@@ -7,6 +7,9 @@ import {
   deletePet,
   fetchOwners
 } from '../../services/api';
+import Modal from '../../components/atoms/Modal';
+import Button from '../../components/atoms/Button';
+import PetForm from '../../components/molecules/PetForm';
 
 export default function Pets() {
   const [pets, setPets] = useState([]);
@@ -132,6 +135,8 @@ export default function Pets() {
       data.append('image', formData.image);
     }
 
+    console.log("Sending form data:", Object.fromEntries(data.entries())); // Log form data
+
     try {
       if (currentPet && currentPet.id) {
         await updatePet(currentPet.id, data);
@@ -144,6 +149,9 @@ export default function Pets() {
       await loadPets();
     } catch (error) {
       console.error('Error saving pet:', error);
+      if (error.response) {
+        console.error("Backend error response:", error.response.data); // Log backend error response
+      }
       alert(`Failed to save pet: ${error.message || 'Unknown error'}`);
     } finally {
       setIsUploading(false);
@@ -174,12 +182,12 @@ export default function Pets() {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Pets Management</h1>
-        <button
+        <Button
           onClick={handleCreate}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+          variant="primary"
         >
           Add New Pet
-        </button>
+        </Button>
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -235,18 +243,21 @@ export default function Pets() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button
+                    <Button
                       onClick={() => handleEdit(pet.id)}
-                      className="text-indigo-600 hover:text-indigo-900 mr-4"
+                      variant="outline"
+                      size="sm"
+                      className="mr-2"
                     >
                       Edit
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => handleDelete(pet.id)}
-                      className="text-red-600 hover:text-red-900"
+                      variant="danger"
+                      size="sm"
                     >
                       Delete
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -256,183 +267,30 @@ export default function Pets() {
       </div>
 
       {/* Add/Edit Pet Modal */}
-      {isModalOpen && (
-          <div className="fixed z-10 inset-0 overflow-y-auto">
-            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-          </div>
-          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
-            &#8203;
-          </span>
-          <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-            <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-            {currentPet ? 'Edit Pet' : 'Add New Pet'}
-              </h3>
-              <form onSubmit={handleSubmit}>
-            {/* Input Name */}
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Pet Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                required
-              />
-            </div>
-            {/* Input Spesies */}
-            <div className="mb-4">
-              <label htmlFor="species" className="block text-sm font-medium text-gray-700">
-                Species
-              </label>
-              <input
-                type="text"
-                name="species"
-                id="species"
-                value={formData.species}
-                onChange={handleInputChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                required
-              />
-            </div>
-            {/* Input Usia */}
-            <div className="mb-4">
-              <label htmlFor="age" className="block text-sm font-medium text-gray-700">
-                Age
-              </label>
-              <input
-                type="number"
-                name="age"
-                id="age"
-                min="0"
-                value={formData.age}
-                onChange={handleInputChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                required
-              />
-            </div>
-            {/* Input Gender */}
-            <div className="mb-4">
-              <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
-                Gender
-              </label>
-              <select
-                name="gender"
-                id="gender"
-                value={formData.gender}
-                onChange={handleInputChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                required
-              >
-                <option value="">Select Gender</option>
-                <option value="Jantan">Jantan</option>
-                <option value="Betina">Betina</option>
-              </select>
-            </div>
-            {/* Upload Image */}
-            <div className="mb-4">
-              <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                Pet Image
-              </label>
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                <div className="space-y-1 text-center">
-                  {imagePreview ? (
-                    <div className="mb-4">
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        className="mx-auto h-32 w-32 object-cover rounded-md"
-                      />
-                    </div>
-                  ) : (
-                    <svg
-                      className="mx-auto h-12 w-12 text-gray-400"
-                      stroke="currentColor"
-                      fill="none"
-                      viewBox="0 0 48 48"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
-                  <div className="flex text-sm text-gray-600">
-                    <label
-                      htmlFor="image"
-                      className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                    >
-                      <span>{imagePreview ? 'Change image' : 'Upload a file'}</span>
-                      <input
-                        id="image"
-                        name="image"
-                        type="file"
-                        className="sr-only"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                </div>
-              </div>
-            </div>
-                  {/* Input Owner */}
-                  <div className="mb-4">
-                    <label htmlFor="owner_id" className="block text-sm font-medium text-gray-700">
-                    Owner
-                    </label>
-                    <select
-                    name="owner_id"
-                    id="owner_id"
-                    value={formData.owner_id}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                    required
-                    >
-                    <option value="">Select Owner</option>
-                    {owners.map(owner => (
-                      <option key={owner.id} value={owner.id}>
-                      {owner.name}
-                      </option>
-                    ))}
-                    </select>
-                  </div>
-                  <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                    <button
-                    type="submit"
-                    disabled={isUploading}
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                    {isUploading ? 'Saving...' : (currentPet ? 'Update' : 'Create')}
-                    </button>
-                    <button
-                    type="button"
-                    onClick={() => {
-                      setIsModalOpen(false);
-                      resetForm();
-                    }}
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                    >
-                    Cancel
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          resetForm();
+        }}
+        title={currentPet ? 'Edit Pet' : 'Add New Pet'}
+        size="medium"
+      >
+        <PetForm
+          formData={formData}
+          owners={owners}
+          imagePreview={imagePreview}
+          isUploading={isUploading}
+          onInputChange={handleInputChange}
+          onFileChange={handleFileChange}
+          onSubmit={handleSubmit}
+          onCancel={() => {
+            setIsModalOpen(false);
+            resetForm();
+          }}
+          isEdit={!!currentPet}
+        />
+      </Modal>
     </div>
   );
 }

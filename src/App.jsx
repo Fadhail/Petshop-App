@@ -19,6 +19,7 @@ import AdminRoute from "./components/AdminRoute"
 import UserRoute from "./components/UserRoute"
 import PublicRoute from "./components/PublicRoute"
 import Adoptions from "./pages/admin/Adoptions"
+import AdminServices from "./pages/admin/Services"
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="pets" element={<Pets />} />
         <Route path="owners" element={<Owners />} />
+        <Route path="services" element={<AdminServices />} />
         <Route path="appointments" element={<Appointments />} />
         <Route path="appointments/:id" element={<AppointmentDetail />} />
         <Route path="form-pet" element={<FormPet />} />
