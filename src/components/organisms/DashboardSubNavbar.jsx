@@ -23,12 +23,7 @@ const DashboardSubNavbar = ({ className = "" }) => {
       name: "Adopsi Saya", 
       icon: <HeartIcon />, 
       path: "/dashboard/my-adoptions"
-    },
-    { 
-      name: "Tips Adopsi", 
-      icon: <TipsIcon />, 
-      path: "/dashboard/adoption-tips"
-    },
+    }
   ];
 
   const isActivePath = (path) => {

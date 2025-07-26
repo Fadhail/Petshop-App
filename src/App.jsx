@@ -61,7 +61,6 @@ function App() {
       }>
         <Route index element={<AdoptionDashboard />} />
         <Route path="my-adoptions" element={<MyAdoptions />} />
-        <Route path="adoption-tips" element={<AdoptionTips />} />
         <Route path="services" element={<DashboardServices />} />
       </Route>
     </Routes>

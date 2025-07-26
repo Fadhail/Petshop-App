@@ -193,17 +193,6 @@ const Services = () => {
           </div>
         </div>
       )}
-
-      {/* Info Section */}
-      <div className="bg-blue-50 rounded-lg p-6">
-        <h2 className="text-xl font-semibold text-blue-800 mb-3">Informasi Pemesanan</h2>
-        <div className="space-y-2 text-blue-700">
-          <p>• Pemesanan layanan akan dikonfirmasi oleh admin dalam 1x24 jam</p>
-          <p>• Pastikan hewan peliharaan Anda dalam kondisi sehat sebelum menggunakan layanan</p>
-          <p>• Hubungi customer service untuk informasi lebih lanjut</p>
-          <p>• Pembayaran dapat dilakukan secara tunai atau transfer</p>
-        </div>
-      </div>
     </div>
   )
 }

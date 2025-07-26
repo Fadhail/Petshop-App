@@ -12,12 +12,10 @@ const SearchFilter = ({
 }) => {
   const speciesOptions = [
     { value: "", label: "All Species" },
-    { value: "dog", label: "dog" },
-    { value: "cat", label: "cat" },
-    { value: "bird", label: "bird" },
-    { value: "rabbit", label: "rabbit" },
-    { value: "hamster", label: "hamster" },
-    { value: "fish", label: "fish" }
+    { value: "Dog", label: "Dog" },
+    { value: "Cat", label: "Cat" },
+    { value: "Hamster", label: "Hamster" },
+    { value: "Other", label: "Other" }
   ];
 
   const statusOptions = [
@@ -42,7 +40,7 @@ const SearchFilter = ({
         
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Jenis Hewan
+            Species
           </label>
           <select
             value={selectedSpecies}
