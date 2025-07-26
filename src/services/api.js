@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://r8s888o0wos0coc8sc0sg8ok.irc-enter.tech/api',
+  baseURL: 'http://localhost:3000/api',
   timeout: 5000,
 });
 
 // Auth API (tanpa prefix /api)
 const authApi = axios.create({
-  baseURL: 'https://r8s888o0wos0coc8sc0sg8ok.irc-enter.tech',
+  baseURL: 'http://localhost:3000',
   timeout: 5000,
 });
 
@@ -72,6 +72,7 @@ export const registerUser = (userData) => authApi.post('/register', userData);
 
 // Adoptions API
 export const fetchAdoptions = () => api.get('/adoptions');
+export const fetchMyAdoptions = () => api.get('/adoptions/my'); // New endpoint for user's own adoptions
 export const fetchAdoption = (id) => api.get(`/adoptions/${id}`);
 export const fetchAdoptionsByStatus = (status) => api.get(`/adoptions/status?status=${status}`);
 export const fetchAdoptionsByPetId = (petId) => api.get(`/adoptions/pet/${petId}`);

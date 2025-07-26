@@ -23,9 +23,7 @@ export default function Owners() {
     try {
       const response = await fetchOwners();
       setOwners(response.data);
-      console.log(response.data);
     } catch (error) {
-      console.error('Error fetching owners:', error);
       alert('Failed to load owners');
     }
   };
@@ -85,11 +83,9 @@ export default function Owners() {
     try {
       if (currentOwner && currentOwner.id) {
         // Update existing owner
-        console.log('Updating owner with ID:', currentOwner.id, 'Data:', formData);
         await updateOwner(currentOwner.id, formData);
       } else {
         // Create new owner
-        console.log('Creating new owner with data:', formData);
         await createOwner(formData);
       }
       setIsModalOpen(false);
@@ -110,11 +106,9 @@ export default function Owners() {
 
     if (window.confirm('Are you sure you want to delete this owner?')) {
       try {
-        console.log('Deleting owner with ID:', id);
         await deleteOwner(id);
         await loadOwners();
       } catch (error) {
-        console.error('Error deleting owner:', error);
         alert(`Failed to delete owner: ${error.message || 'Unknown error'}`);
       }
     }

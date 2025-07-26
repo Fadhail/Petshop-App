@@ -40,7 +40,7 @@ const AdoptionDashboard = () => {
           // Add gender (keep as is or default)
           gender: pet.gender || 'Unknown',
           // Add default image if not present
-          image: pet.image || "/api/placeholder/300/200",
+          image: pet.image_url || "/api/placeholder/300/200",
           // Add owner info
           owner: ownersData.find(owner => owner.id === pet.owner_id),
           // Add description if not present
@@ -49,15 +49,18 @@ const AdoptionDashboard = () => {
           healthInfo: pet.healthInfo || "Kondisi kesehatan baik, siap untuk diadopsi"
         }));
 
+        // Filter only available pets for adoption dashboard
+        const availablePets = transformedPets.filter(pet => pet.status === "available");
+
         // Calculate stats
         const statsData = {
           totalPets: transformedPets.length,
-          availablePets: transformedPets.filter(pet => pet.status === "available").length,
+          availablePets: availablePets.length,
           pendingPets: transformedPets.filter(pet => pet.status === "pending").length,
           adoptedPets: transformedPets.filter(pet => pet.status === "adopted").length
         };
 
-        setPets(transformedPets);
+        setPets(availablePets); // Only set available pets for display
         setOwners(ownersData);
         setStats(statsData);
       } catch (error) {

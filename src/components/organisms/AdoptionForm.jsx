@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "../atoms/Button";
 import Input from "../atoms/Input";
 import Card from "../atoms/Card";
+import { useAuth } from "../../contexts/AuthContext";
 
 const AdoptionForm = ({ pet, isOpen, onClose, onSubmit }) => {
+  const { user } = useAuth(); // Get current user from auth context
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,10 +21,44 @@ const AdoptionForm = ({ pet, isOpen, onClose, onSubmit }) => {
 
   const [errors, setErrors] = useState({});
 
+  // Set user email when component mounts or user changes
+  useEffect(() => {
+    if (user && user.email) {
+      setFormData(prev => ({
+        ...prev,
+        email: user.email
+      }));
+    }
+  }, [user]);
+
+  // Reset form when modal opens (except email)
+  useEffect(() => {
+    if (isOpen && user) {
+      setFormData({
+        name: "",
+        email: user.email || "",
+        phone: "",
+        address: "",
+        experience: "",
+        reason: "",
+        livingSpace: "",
+        hasOtherPets: false,
+        otherPetsDetails: ""
+      });
+      setErrors({});
+    }
+  }, [isOpen, user]);
+
   if (!isOpen || !pet) return null;
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    
+    // Prevent email field from being changed
+    if (name === 'email') {
+      return;
+    }
+    
     setFormData(prev => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value
@@ -40,17 +77,11 @@ const AdoptionForm = ({ pet, isOpen, onClose, onSubmit }) => {
     const newErrors = {};
     
     if (!formData.name.trim()) newErrors.name = "Nama harus diisi";
-    if (!formData.email.trim()) newErrors.email = "Email harus diisi";
+    // Email validation removed since it's auto-filled from user account
     if (!formData.phone.trim()) newErrors.phone = "Nomor telepon harus diisi";
     if (!formData.address.trim()) newErrors.address = "Alamat harus diisi";
     if (!formData.reason.trim()) newErrors.reason = "Alasan adopsi harus diisi";
     if (!formData.livingSpace.trim()) newErrors.livingSpace = "Kondisi tempat tinggal harus diisi";
-    
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (formData.email && !emailRegex.test(formData.email)) {
-      newErrors.email = "Format email tidak valid";
-    }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -102,6 +133,9 @@ const AdoptionForm = ({ pet, isOpen, onClose, onSubmit }) => {
                 value={formData.email}
                 onChange={handleInputChange}
                 error={errors.email}
+                readOnly={true}
+                className="bg-gray-50 cursor-not-allowed text-gray-700"
+                placeholder="Email akan diisi otomatis dari akun Anda"
                 required
               />
             </div>

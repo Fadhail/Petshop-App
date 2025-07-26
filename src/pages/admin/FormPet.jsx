@@ -2,7 +2,7 @@ import { useState } from 'react';
 import api from '../../services/api';
 
 export default function FormPet() {
-  const [form, setForm] = useState({ name: '', species: '', age: 0, image: null });
+  const [form, setForm] = useState({ name: '', species: '', age: 0, image: null , status: 'available' });
 
   const handleChange = e => {
     const { name, value, files } = e.target;
@@ -20,6 +20,7 @@ export default function FormPet() {
     formData.append('species', form.species);
     formData.append('age', form.age);
     formData.append('image', form.image);
+    formData.append('status', form.status); // Include status in the form data
 
     api.post('/pets', formData, {
       headers: {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { fetchAdoptions, fetchPets } from "../../services/api";
+import { fetchMyAdoptions, fetchPets } from "../../services/api";
+import { useAuth } from "../../contexts/AuthContext";
 import Card from "../../components/atoms/Card";
 import Button from "../../components/atoms/Button";
 import Badge from "../../components/atoms/Badge";
@@ -8,6 +9,7 @@ const MyAdoptions = () => {
   const [adoptions, setAdoptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user, isAuthenticated } = useAuth();
 
   // Load adoptions from API
   useEffect(() => {
@@ -16,12 +18,18 @@ const MyAdoptions = () => {
         setLoading(true);
         setError(null);
         
+        // Check if user is authenticated
+        if (!isAuthenticated()) {
+          setError('Anda harus login untuk melihat adopsi Anda.');
+          return;
+        }
+        
         const [adoptionsResponse, petsResponse] = await Promise.all([
-          fetchAdoptions(),
+          fetchMyAdoptions(), // Use the new endpoint
           fetchPets()
         ]);
 
-        const adoptionsData = adoptionsResponse.data || [];
+        const adoptionsData = adoptionsResponse.data?.data || []; // Updated to handle new response format
         const petsData = petsResponse.data || [];
 
         // Transform adoptions data to include pet info
@@ -29,13 +37,13 @@ const MyAdoptions = () => {
           const pet = petsData.find(p => p.id === adoption.pet_id);
           return {
             ...adoption,
-            petName: pet ? pet.name : 'Unknown Pet',
+            petName: pet ? pet.name : adoption.pet_name || 'Unknown Pet',
             petSpecies: pet ? pet.species : 'Unknown',
             petBreed: pet ? pet.breed || 'Mixed' : 'Unknown',
-            petImage: pet ? pet.image || "/api/placeholder/300/200" : "/api/placeholder/300/200",
-            applicantName: adoption.adopter_name,
-            applicantEmail: adoption.adopter_email,
-            applicationDate: adoption.created_at || new Date().toISOString(),
+            petImage: pet ? pet.image_url || "/api/placeholder/300/200" : "/api/placeholder/300/200",
+            applicantName: adoption.name, // Updated field mapping
+            applicantEmail: adoption.email, // Updated field mapping
+            applicationDate: adoption.submission_date || adoption.created_at || new Date().toISOString(),
             notes: adoption.notes || getDefaultNotes(adoption.status)
           };
         });
@@ -43,14 +51,18 @@ const MyAdoptions = () => {
         setAdoptions(transformedAdoptions);
       } catch (error) {
         console.error('Error loading adoptions:', error);
-        setError('Gagal memuat data adopsi. Silakan coba lagi.');
+        if (error.response?.status === 401) {
+          setError('Sesi Anda telah berakhir. Silakan login kembali.');
+        } else {
+          setError('Gagal memuat data adopsi. Silakan coba lagi.');
+        }
       } finally {
         setLoading(false);
       }
     };
 
     loadAdoptions();
-  }, []);
+  }, [isAuthenticated]); // Add dependency to reload when auth status changes
 
   const getDefaultNotes = (status) => {
     switch (status) {

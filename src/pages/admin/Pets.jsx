@@ -135,8 +135,6 @@ export default function Pets() {
       data.append('image', formData.image);
     }
 
-    console.log("Sending form data:", Object.fromEntries(data.entries())); // Log form data
-
     try {
       if (currentPet && currentPet.id) {
         await updatePet(currentPet.id, data);
@@ -150,7 +148,7 @@ export default function Pets() {
     } catch (error) {
       console.error('Error saving pet:', error);
       if (error.response) {
-        console.error("Backend error response:", error.response.data); // Log backend error response
+        // Backend error occurred
       }
       alert(`Failed to save pet: ${error.message || 'Unknown error'}`);
     } finally {
@@ -168,11 +166,9 @@ export default function Pets() {
 
     if (window.confirm('Are you sure you want to delete this pet?')) {
       try {
-        console.log('Deleting pet with ID:', id);
         await deletePet(id);
         await loadPets();
       } catch (error) {
-        console.error('Error deleting pet:', error);
         alert(`Failed to delete pet: ${error.message || 'Unknown error'}`);
       }
     }
