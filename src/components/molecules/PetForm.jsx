@@ -14,6 +14,14 @@ const PetForm = ({
   onCancel,
   isEdit = false
 }) => {
+  const speciesOptions = [
+    { value: 'Dog', label: 'Dog' },
+    { value: 'Cat', label: 'Cat' },
+    { value: 'Bird', label: 'Bird' },
+    { value: 'Hamster', label: 'Hamster' },
+    { value: 'Other', label: 'Other' }
+  ]
+
   // Prepare gender options
   const genderOptions = [
     { value: 'Jantan', label: 'Jantan' },
@@ -37,12 +45,14 @@ const PetForm = ({
         required
       />
 
-      <Input
+      <Select
         label="Species"
         name="species"
         id="species"
         value={formData.species}
         onChange={onInputChange}
+        options={speciesOptions}
+        placeholder="Select Species"
         required
       />
 
